@@ -16,10 +16,7 @@
 const props = defineProps({
   header: String,
   maxWidth: {
-    type: Number,
-    validator(value: string) {
-      return (/\D/.test(value))
-    },
+    type: Number,    
     default: 18,
   },
   title: String,

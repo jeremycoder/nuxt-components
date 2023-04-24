@@ -26,9 +26,6 @@ const props = defineProps({
   menu: Array<Link>,
   position: {
     type: Number,
-    validator(value: string) {
-      return (/\D/.test(value))
-    },
     default: 0,
   }
 })

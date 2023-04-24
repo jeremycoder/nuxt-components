@@ -2,7 +2,7 @@
   <div>
     <h1>Forms</h1>
     <p>Construct a form from a typed object. Submit button returns ids as keys with entered values.</p>
-    <NxFormNew :data="data" />
+    <NxForm :data="data" />
 
   </div>
 </template>

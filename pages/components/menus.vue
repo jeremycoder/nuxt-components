@@ -1,8 +1,20 @@
 <template>
   <div>
-    <h1>Menus</h1>    
-    <p>Use these dropdown menus to create endless multi-level menus</p>    
-    <NxMenu :menu="menu" />    
+    <h1>Menus</h1> 
+    <div class="menu-parent">
+      <p>Use these dropdown menus to create endless multi-level menus</p>    
+      <NxMenu :menu="menu" />
+    </div>
+    
+    <div class="menu-parent">
+      <p>Menu with no shadow</p>    
+      <NxMenu :menu="menu" :shadow="false" />
+    </div>
+
+    <div class="menu-parent">
+      <p>Menu with no shadow and no shadow on the children</p>    
+      <NxMenu :menu="menu" :shadow="false" :shadow-on-children="false" />
+    </div>         
   </div>
 </template>
 
@@ -68,3 +80,9 @@
   }
   ]
 </script>
+
+<style scoped>
+.menu-parent {
+  margin-bottom: 20rem;
+}
+</style>

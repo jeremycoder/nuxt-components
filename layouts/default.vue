@@ -97,7 +97,7 @@ const topMenu = [
  * @desc Receive clicked link from menu and navigate to that link
  * @param event Receive clicked link data
  */
-function menuClicked(menuItem: Link) {
+function menuClicked(menuItem: Link) {  
   navigateTo(menuItem.link)
 }
 

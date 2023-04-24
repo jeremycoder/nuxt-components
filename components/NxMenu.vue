@@ -8,7 +8,7 @@
       {{ item.name }}
       <span v-if="item.children && item.showChildren !== false">
         <span class="arrow" @click="toggleShowChildren(showChildren)">&raquo;</span>
-        <nxMenu v-if="showChildren" :menu="item.children" />
+        <nxMenu v-if="showChildren" :menu="item.children" :shadow="shadowOnChildren" />
       </span>
     </li>
   </ul>
@@ -30,6 +30,10 @@ type Links = Array<Link>
 const props = defineProps({
   menu: Array<Link>,
   shadow: {
+    type: Boolean,
+    default: true
+  },
+  shadowOnChildren: {
     type: Boolean,
     default: true
   }

@@ -12,10 +12,7 @@ const emit = defineEmits(["close"]);
 
 defineProps({
   maxWidth: {
-    type: Number,
-    validator(value: string) {
-      return (/\D/.test(value))
-    },
+    type: Number,    
     default: 18,
   },
 })

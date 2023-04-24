@@ -12,6 +12,8 @@
 <script setup lang="ts">
 const emit = defineEmits(['click'])
 
+
+
 const props = defineProps({
   state: {
     validator(value: string) {
@@ -21,7 +23,19 @@ const props = defineProps({
   },
   theme: {
     validator(value: string) {
-      return ['primary', 'secondary', 'success', 'info', 'warning', 'danger', 'dark', 'light', 'link'].includes(value)
+      return [
+        'primary', 
+        'secondary', 
+        'success', 
+        'info', 
+        'warning', 
+        'danger', 
+        'dark', 
+        'light', 
+        'link', 
+        'primary-outline',
+        'success-outline'
+      ].includes(value)
     },
     default: 'primary',
   },

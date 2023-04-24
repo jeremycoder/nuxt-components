@@ -1,137 +1,117 @@
 <!-- This component displays an object as an input form -->
 <template>
-  <form class="mb-5">
+  <form class="mb-5" :style="`width: ${width}rem;`">
     <div class="mb-3">
-      <div v-for="(value, key) in props.object">
-        <label :for="key" class="form-label"><strong>{{ key }}</strong></label>
-        <input ref="inputs" :type="getType(key)" class="form-control mb-3" :id="key" :value="value"
-          :disabled="props.disabled && props.disabled.includes(key)" @change="hasChanged = true" />
-        <!-- Show these elements as select elements -->
-        <select v-if="key === props.asSelect1 && props.selectOptions1 && props.selectOptions1.length"
-          @change="$event.target ? updateChoice(key, $event.target as HTMLSelectElement) : null" class="mb-3">
-          <option v-for="(option) in selectOptions1" :value="option">{{ option }}</option>
-        </select>
-        <select v-if="key === props.asSelect2 && props.selectOptions2 && props.selectOptions2.length"
-          @change="$event.target ? updateChoice(key, $event.target as HTMLSelectElement) : null" class="mb-3">
-          <option v-for="(option) in selectOptions2" :value="option">{{ option }}</option>
-        </select>
-        <select v-if="key === props.asSelect3 && props.selectOptions3 && props.selectOptions3.length"
-          @change="$event.target ? updateChoice(key, $event.target as HTMLSelectElement) : null" class="mb-3">
-          <option v-for="(option) in selectOptions3" :value="option">{{ option }}</option>
-        </select>
-        <!-- Show these elements as boolean select elements -->
-        <select v-if="key === props.asBoolean1"
-          @change="$event.target ? updateChoice(key, $event.target as HTMLSelectElement) : null" class="mb-3">
-          <option value="true">TRUE</option>
-          <option value="false">FALSE</option>
-        </select>
-        <select v-if="key === props.asBoolean2"
-          @change="$event.target ? updateChoice(key, $event.target as HTMLSelectElement) : null" class="mb-3">
-          <option value="true">TRUE</option>
-          <option value="false">FALSE</option>
-        </select>
-        <select v-if="key === props.asBoolean3"
-          @change="$event.target ? updateChoice(key, $event.target as HTMLSelectElement) : null" class="mb-3">
-          <option value="true">TRUE</option>
-          <option value="false">FALSE</option>
-        </select>
+      <div v-for="(item, index) in data" :key="index">
+        <label v-if="item.label" :for="item.label" class="form-label"><strong>{{ item.label }}</strong></label>
+        <input v-if="item.type === 'input:text' && item.show !== false" type="text" class="form-control mb-3"
+          :id="item.id" :disabled="item.disabled" @change="updateInputs" />
+        <input v-if="item.type === 'input:password' && item.show !== false" type="password" class="form-control mb-3"
+          :id="item.id" :disabled="item.disabled" @change="updateInputs" />
+        <input v-if="item.type === 'input:number' && item.show !== false" type="number" class="form-control mb-3"
+          :id="item.id" :disabled="item.disabled" @change="updateInputs" />
+        <input v-if="item.type === 'input:email' && item.show !== false" type="email" class="form-control mb-3"
+          :id="item.id" :disabled="item.disabled" @change="updateInputs" />
+        <textarea v-if="item.type === 'textarea' && item.show !== false" :id="item.id" :disabled="item.disabled"
+          @change="updateInputs">
+        </textarea>
+        <span v-if="item.type === 'select' && item.show !== false">
+          <select :id="item.id" class="form-control mb-3" :disabled="item.disabled" @change="updateInputs">
+            <option v-for="(option, index) in item.options" :key="index" class="mb-3">{{ option }}</option>
+          </select>
+        </span>
       </div>
     </div>
-    <button type="submit" class="btn btn-primary" :disabled="hasChanged === false" @click.prevent="update">
-      Submit
-    </button>
-    <button type="submit" class="btn btn-secondary ms-2" @click.prevent="close">
-      Close
-    </button>
+    <span @click.prevent="submit">
+      <NxButton>Submit</NxButton>
+    </span>
+
   </form>
 </template>
 
 <script setup lang="ts">
-const emit = defineEmits(["update", "close"]);
+type FormInput = {
+  label?: string,
+  id: string,
+  type?: 'input:text' | 'input:password' | 'input:email' | 'input:number' | 'textarea' | 'select',
+  options?: Array<string>,
+  disabled?: boolean,
+  show?: boolean,
+}
 
-const props = defineProps({
-  title: String,
-  description: String,
-  object: Object,
-  disabled: Array<string>,
-  asSelect1: String,
-  selectOptions1: Array<string>,
-  asSelect2: String,
-  selectOptions2: Array<string>,
-  asSelect3: String,
-  selectOptions3: Array<string>,
-  asBoolean1: String,
-  asBoolean2: String,
-  asBoolean3: String,
+const emit = defineEmits(["submit"]);
+
+defineProps({
+  data: {
+    type: Array<FormInput>,
+  },
+  width: {
+    type: Number,    
+    default: 14,
+  },
 })
 
-// Template refs
-const inputs = ref(Array<HTMLInputElement>())
-
-// Object to hold values from input elements
-const updatedObject = {}
-
-// Object to hold values from select elements
-const updatedSelectObject = {}
-
-// Flag to detect changes
-const hasChanged = ref(false)
+const updatedInputs = {}
 
 /**
- * @desc Return the type of input HTML element to be used based on the object key
- * @param inputType Type of input such as "text", "email", or "password" 
+ * @desc Update inputs when the form is updated
+ * @param event Change event received from HTML tag
  */
-function getType(inputType: string): string {
-  switch (inputType) {
-    case "password":
-      return "password"
-    case "email":
-      return "email"
-    default:
-      return "text"
-  }
+function updateInputs(event: Event) {
+  const targetElement = event.target as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+  const id = targetElement.getAttribute('id')
+  const value = targetElement.value
+
+  /* @ts-ignore */
+  if (id && value) updatedInputs[id] = value  
 }
 
-/**
- * @ Create object from all inputs and emit the object
- */
-function update() {
-  // Get all values from inputs
-  inputs.value.forEach((input) => {
-    const key = input.getAttribute('id')
-    const value = input.value
-
-    //@ts-ignore
-    if (key) updatedObject[key] = value
-  })
-
-  // Update from select elements
-  for (const key in updatedSelectObject) {
-    //@ts-ignore    
-    updatedObject[key] = updatedSelectObject[key]
-  }
-
-  // Change Boolean strings to Boolean values
-  for (const key in updatedObject) {
-    //@ts-ignore 
-    if (updatedObject[key] === 'true') updatedObject[key] = true
-    //@ts-ignore
-    if (updatedObject[key] === 'false') updatedObject[key] = false
-  }
-
-  emit('update', updatedObject)
+function submit() {
+  emit('submit', updateInputs)
 }
 
-/**
- * Get choice from HTML select elements
- * @param key Key from updated choice in select element
- * @param element HTML select element sending choice
- */
-function updateChoice(key: string, element: HTMLSelectElement) {
-  hasChanged.value = true
-  //@ts-ignore
-  updatedSelectObject[key] = element.value
-}
+
 </script>
 
-<style scoped></style>
+<style scoped>
+.mb-5 {
+  margin-bottom: 3rem;
+}
+
+.mb-3 {
+  margin-bottom: 1rem;
+}
+
+.form-label {
+  margin-bottom: 0.5rem;
+}
+
+label {
+  display: inline-block;
+}
+
+.form-control {
+  display: block;
+  width: 100%;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  appearance: none;
+  border-radius: 0.25rem;
+  transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+
+select {
+  text-transform: none;
+}
+
+input:disabled,
+select:disabled {
+  background-color: #eee;
+}
+</style>

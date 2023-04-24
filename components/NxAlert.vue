@@ -1,7 +1,7 @@
 <template>
   <div v-if="isOpen" class="alert alert-dismissible fade" :class="[themeClass]" role="alert">
     <slot />
-    <span @click="isOpen = false">
+    <span @click="isOpen = false" class="cross">
       <svg fill="#000000" height="17px" width="17px" class="cross" version="1.1" id="Capa_1"
         xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 460.775 460.775"
         xml:space="preserve">
@@ -137,5 +137,9 @@ const themeClass = computed(() => {
   color: #141619;
   background-color: #d3d3d4;
   border-color: #bcbebf;
+}
+
+.cross {
+  cursor: pointer;
 }
 </style>
