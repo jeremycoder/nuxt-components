@@ -3,7 +3,6 @@
     <h4 class="card-header">{{ header }}</h4>
     <div class="card-body">
       <h5 class="card-title" :class="[themeClass]">{{ title }}</h5>
-      <!-- Profile errors notification --><!--v-if-->
       <p>{{ text }}</p>
       <div class="m-4">
         <slot />

@@ -1,7 +1,11 @@
 <template>
-  <div class="iam-spec-modal">
+  <div class="iam-spec-modal" @click="close">
     <div class="iam-spec-modal-content" :style="`max-width:${maxWidth}rem`">
-      <div class="iam-spec-close" @click="close">&times;</div>
+      <div class="title-bar">
+        <div v-if="title" class="title" :title="title">{{ title }}</div>
+        <div class="iam-spec-close" @click="close">&times;</div>
+      </div>
+      <div v-if="description" :title="description" class="description">{{ description }}</div>      
       <slot />
     </div>
   </div>
@@ -11,6 +15,8 @@
 const emit = defineEmits(["close"]);
 
 defineProps({
+  title: String,
+  description: String,
   maxWidth: {
     type: Number,    
     default: 18,
@@ -48,6 +54,20 @@ function close() {
   /* Black w/ opacity */
 }
 
+.title-bar {
+  display: flex;
+  align-items: center;
+}
+
+.title {
+  font-size: 120%;
+}
+
+.description {
+  font-size: 95%;
+  margin-bottom: 1rem;
+}
+
 /* Modal Content/Box */
 .iam-spec-modal-content {
   margin: 15% auto;
@@ -61,14 +81,14 @@ function close() {
 /* The Close Button */
 .iam-spec-close {
   color: #aaa;
-  text-align: right;
+  margin-left:auto;  
   font-size: 280%;
   font-weight: bold;
 }
 
 .iam-spec-close:hover,
 .iam-spec-close:focus {
-  color: black;
+  color: red;
   text-decoration: none;
   cursor: pointer;
 }

@@ -2,7 +2,7 @@
   <div>
     <h1>Forms</h1>
     <p>Construct a form from a typed object. Submit button returns ids as keys with entered values.</p>
-    <NxForm :data="data" />
+    <NxForm :data="data" @submit="formOutput" />
 
   </div>
 </template>
@@ -58,5 +58,13 @@ const data = [
     type: 'input:text',
   },
 ] as Array<FormInput>
+
+  /**
+   * Data returned from NxForm
+   * @param event Event returned from NxForm
+   */
+  function formOutput(event: Event){
+    console.log('Output: ', event)
+  }
 
 </script>

@@ -30,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-type FormInput = {
+type NxFormInput = {
   label?: string,
   id: string,
   type?: 'input:text' | 'input:password' | 'input:email' | 'input:number' | 'textarea' | 'select',
@@ -43,7 +43,7 @@ const emit = defineEmits(["submit"]);
 
 defineProps({
   data: {
-    type: Array<FormInput>,
+    type: Array<NxFormInput>,
   },
   width: {
     type: Number,    
@@ -67,7 +67,7 @@ function updateInputs(event: Event) {
 }
 
 function submit() {
-  emit('submit', updateInputs)
+  emit('submit', updatedInputs)
 }
 
 
