@@ -1,5 +1,5 @@
 <template>
-  <div class="iam-spec-modal" @click="close">
+  <div class="iam-spec-modal" @click.self="close">
     <div class="iam-spec-modal-content" :style="`max-width:${maxWidth}rem`">
       <div class="title-bar">
         <div v-if="title" class="title" :title="title">{{ title }}</div>

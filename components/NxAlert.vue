@@ -87,6 +87,10 @@ const themeClass = computed(() => {
   margin-left: 1rem;
 }
 
+.cross:hover {
+  color: red;
+}
+
 .alert-dismissible {
   padding-right: 3rem;
 }

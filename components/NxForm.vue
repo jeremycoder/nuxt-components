@@ -5,18 +5,18 @@
       <div v-for="(item, index) in data" :key="index">
         <label v-if="item.label" :for="item.label" class="form-label"><strong>{{ item.label }}</strong></label>
         <input v-if="item.type === 'input:text' && item.show !== false" type="text" class="form-control mb-3"
-          :id="item.id" :disabled="item.disabled" @change="updateInputs" />
+          :id="item.id" :disabled="item.disabled ?? false" :value="item.value ?? ''" @change="updateInputs" />
         <input v-if="item.type === 'input:password' && item.show !== false" type="password" class="form-control mb-3"
-          :id="item.id" :disabled="item.disabled" @change="updateInputs" />
+          :id="item.id" :disabled="item.disabled ?? false" :value="item.value ?? ''" @change="updateInputs" />
         <input v-if="item.type === 'input:number' && item.show !== false" type="number" class="form-control mb-3"
-          :id="item.id" :disabled="item.disabled" @change="updateInputs" />
+          :id="item.id" :disabled="item.disabled ?? false" :value="item.value ?? ''" @change="updateInputs" />
         <input v-if="item.type === 'input:email' && item.show !== false" type="email" class="form-control mb-3"
-          :id="item.id" :disabled="item.disabled" @change="updateInputs" />
-        <textarea v-if="item.type === 'textarea' && item.show !== false" :id="item.id" :disabled="item.disabled"
-          @change="updateInputs">
+          :id="item.id" :disabled="item.disabled ?? false" :value="item.value ?? ''" @change="updateInputs" />
+        <textarea v-if="item.type === 'textarea' && item.show !== false" :id="item.id" :disabled="item.disabled ?? false"
+          :value="item.value ?? ''" @change="updateInputs">
         </textarea>
         <span v-if="item.type === 'select' && item.show !== false">
-          <select :id="item.id" class="form-control mb-3" :disabled="item.disabled" @change="updateInputs">
+          <select :id="item.id" class="form-control mb-3" :disabled="item.disabled ?? false" :value="item.value ?? ''" @change="updateInputs">
             <option v-for="(option, index) in item.options" :key="index" class="mb-3">{{ option }}</option>
           </select>
         </span>
@@ -37,7 +37,10 @@ type NxFormInput = {
   options?: Array<string>,
   disabled?: boolean,
   show?: boolean,
+  value?: string,
 }
+
+const formElements = ref(null)
 
 const emit = defineEmits(["submit"]);
 
@@ -57,7 +60,7 @@ const updatedInputs = {}
  * @desc Update inputs when the form is updated
  * @param event Change event received from HTML tag
  */
-function updateInputs(event: Event) {
+function updateInputs(event: Event) {  
   const targetElement = event.target as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
   const id = targetElement.getAttribute('id')
   const value = targetElement.value
@@ -66,7 +69,7 @@ function updateInputs(event: Event) {
   if (id && value) updatedInputs[id] = value  
 }
 
-function submit() {
+function submit() { 
   emit('submit', updatedInputs)
 }
 
