@@ -1,11 +1,11 @@
 <template>
-  <div>
+  <div class="footer">
     <div class="text-muted text-center"><slot /></div>
   </div>
 </template>
 
 <style scoped>
-footer {
+.footer {
   padding-top: 1rem;
   padding-bottom: 1rem;
   margin-top: 1.5rem;
@@ -17,7 +17,7 @@ footer {
 .text-muted {
   color: #6c757d;
 }
-footer {
+.footer {
   border-top: 1px solid #dee2e6;
 }
 </style>
