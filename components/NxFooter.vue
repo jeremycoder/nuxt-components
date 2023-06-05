@@ -1,7 +1,7 @@
 <template>
-  <footer>
+  <div>
     <div class="text-muted text-center"><slot /></div>
-  </footer>
+  </div>
 </template>
 
 <style scoped>
